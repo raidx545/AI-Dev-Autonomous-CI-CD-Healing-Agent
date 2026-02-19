@@ -130,7 +130,7 @@ class Agent:
         score = ScoreBreakdown()
         score.base_score = 100
         score.speed_bonus = 10 if summary.total_time_seconds < 300 else 0
-        total_commits = sum(len(it.fixes_applied) for it in summary.iterations)
+        total_commits = summary.total_fixes_applied
         score.efficiency_penalty = max(0, (total_commits - 20) * 2)
         score.final_score = max(0, score.base_score + score.speed_bonus - score.efficiency_penalty)
         summary.score = score

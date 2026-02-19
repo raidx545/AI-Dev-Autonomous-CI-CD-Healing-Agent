@@ -315,3 +315,34 @@ INFO:     connection open
 INFO:     127.0.0.1:56408 - "GET /api/runs/b2bd227a HTTP/1.1" 200 OK
 2026-02-20 01:11:07,374 [INFO] app.main: WebSocket disconnected for run b2bd227a
 INFO:     connection closed
+INFO:     127.0.0.1:56584 - "POST /api/runs HTTP/1.1" 200 OK
+2026-02-20 02:10:40,095 [INFO] app.services.clone_service: Cloning https://github.com/ronakgarg2005/test_demo into /Users/raidx/.devops_agent/repos/test_demo
+2026-02-20 02:10:41,920 [INFO] app.services.clone_service: Successfully cloned to /Users/raidx/.devops_agent/repos/test_demo
+INFO:     ('127.0.0.1', 56587) - "WebSocket /ws/be973d55" [accepted]
+2026-02-20 02:10:42,197 [INFO] app.main: WebSocket connected for run be973d55
+INFO:     connection open
+2026-02-20 02:10:42,233 [INFO] app.services.git_ops: Created and switched to branch: CODE_MAFIA_RONAK_AI_Fix
+2026-02-20 02:10:42,234 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 02:10:42,234 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 02:10:43,562 [INFO] app.services.fix_generator: Syntax/Indentation error detected in test.py. Targeting file itself.
+2026-02-20 02:10:43,563 [INFO] app.services.fix_generator: Syntax/Indentation error detected in test.py. Targeting file itself.
+2026-02-20 02:10:43,564 [INFO] app.services.fix_generator: Calling Sarvam AI (sarvam-m) for fix generation...
+2026-02-20 02:10:44,594 [INFO] httpx: HTTP Request: POST https://api.sarvam.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 02:10:44,597 [INFO] app.services.fix_generator: Fix applied successfully to test.py (bug_type=INDENTATION)
+2026-02-20 02:10:44,719 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix INDENTATION in test.py: IndentationError (323e2142)
+2026-02-20 02:10:44,723 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 02:10:44,723 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 02:10:45,706 [INFO] app.services.fix_generator: ModuleNotFoundError: 'math_util' fuzzy-matches 'math_utils.py' → fixing test.py import
+2026-02-20 02:10:45,707 [INFO] app.services.fix_generator: ModuleNotFoundError: 'math_util' fuzzy-matches 'math_utils.py' → fixing test.py import
+2026-02-20 02:10:45,707 [INFO] app.services.fix_generator: Programmatic import fix: 'math_util' → 'math_utils' in test.py
+2026-02-20 02:10:45,819 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix IMPORT in test.py: wrong module name 'math_util' (01ee9879)
+2026-02-20 02:10:45,821 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 02:10:45,821 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 02:10:46,769 [INFO] app.services.git_ops: Set auth URL for push (token injected)
+2026-02-20 02:10:48,748 [INFO] app.services.git_ops: Pushed branch CODE_MAFIA_RONAK_AI_Fix to origin
+2026-02-20 02:10:50,282 [INFO] httpx: HTTP Request: POST https://api.github.com/repos/ronakgarg2005/test_demo/pulls "HTTP/1.1 201 Created"
+2026-02-20 02:10:50,470 [INFO] app.services.git_ops: Pull request created: https://github.com/ronakgarg2005/test_demo/pull/18
+2026-02-20 02:10:51,203 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/ronakgarg2005/test_demo/actions/workflows "HTTP/1.1 200 OK"
+2026-02-20 02:10:51,207 [INFO] app.agent: Written results.json to /Users/raidx/.devops_agent/repos/test_demo/results.json
+2026-02-20 02:10:51,208 [INFO] app.agent: [completed] Agent run complete! Status: unknown, Fixes: 2, Time: 11.1s
+INFO:     127.0.0.1:56603 - "GET /api/runs/be973d55 HTTP/1.1" 200 OK
