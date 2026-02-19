@@ -67,7 +67,8 @@ class TestRunner:
             if os.path.exists(req_file):
                 result = self._run_cmd(
                     [python_exe, "-m", "pip", "install", "-r", "requirements.txt"],
-                    cwd=repo_path
+                    cwd=repo_path,
+                    timeout=600
                 )
                 outputs.append(f"pip install: {result['output']}")
                 if not result["success"]:
@@ -78,7 +79,8 @@ class TestRunner:
             if os.path.exists(pyproject):
                 result = self._run_cmd(
                     [python_exe, "-m", "pip", "install", "-e", "."],
-                    cwd=repo_path
+                    cwd=repo_path,
+                    timeout=600
                 )
                 outputs.append(f"pip install -e .: {result['output']}")
 
@@ -88,7 +90,8 @@ class TestRunner:
                 logger.info("pytest not found, installing...")
                 result = self._run_cmd(
                     [python_exe, "-m", "pip", "install", "pytest"],
-                    cwd=repo_path
+                    cwd=repo_path,
+                    timeout=120
                 )
                 outputs.append(f"Auto-installed pytest: {result['output'][:200]}")
 
@@ -97,7 +100,8 @@ class TestRunner:
             if os.path.exists(pkg_json):
                 result = self._run_cmd(
                     ["npm", "install"],
-                    cwd=repo_path
+                    cwd=repo_path,
+                    timeout=600
                 )
                 outputs.append(f"npm install: {result['output']}")
                 if not result["success"]:
