@@ -128,6 +128,10 @@ class TestRunner:
         logger.info(f"Running tests: {' '.join(cmd)}")
         result = self._run_cmd(cmd, cwd=repo_path, timeout=300)
 
+        if not result["success"]:
+            # Optional: log a summary, but avoids dumping huge output
+            pass
+
         # Parse failures from output
         failures = self._parse_failures(
             result["output"], repo_path, languages, test_frameworks
@@ -275,11 +279,29 @@ class TestRunner:
             # Normalize path: strip leading ../../../ to get a clean relative path
             file_path = re.sub(r'^(\.\./)+', '', raw_path)
 
+            # Try to find line number in the traceback for this test
+            # Search for "____ test_name ____" and then "file_path:line"
+            line_no = None
+            try:
+                # Find the header section for this test
+                header_match = re.search(r"_{3,}\s+" + re.escape(test_name) + r"\s+_{3,}", output)
+                if header_match:
+                    section_start = header_match.end()
+                    # Look for file_path:line in the section following the header
+                    # allow for relative path differences so search for basename
+                    basename = os.path.basename(file_path)
+                    line_match = re.search(re.escape(basename) + r":(\d+):", output[section_start:section_start+2000])
+                    if line_match:
+                        line_no = int(line_match.group(1))
+            except Exception:
+                pass
+
             failures.append(TestFailure(
                 test_name=test_name,
                 file_path=file_path,
                 error_message=error_msg,
                 error_type=error_msg.split(":")[0] if ":" in error_msg else error_msg,
+                line_number=line_no,
                 raw_output=output,
             ))
 
@@ -328,22 +350,37 @@ class TestRunner:
                 error_msg = f"{error_type}: {error_type_match.group(2).strip()}"
 
             # Find the actual source file from traceback (last non-pytest/stdlib File reference in repo)
-            for ref in reversed(file_refs):
-                # Skip pytest internals, stdlib, and the test file itself
-                if any(skip in ref for skip in ['site-packages', '<frozen', 'lib/python']):
-                    continue
-                if ref.endswith(file_path.lstrip('./')):
-                    continue  # skip the test file itself
-                if ref.endswith('.py'):
-                    # Use this as the actual buggy file
-                    actual_file = os.path.relpath(ref, repo_path) if os.path.exists(ref) else os.path.basename(ref)
-                    break
+            # We want to capture line numbers too.
+            # Strategy 1: File "...", line \d+
+            matches_1 = re.findall(r'File "([^"]+)", line (\d+)', output)
+            # Strategy 2: path:line: (often used in pytest tracebacks without File keyword)
+            matches_2 = re.findall(r'\n([\w./\\-]+):(\d+):', output)
+            
+            traceback_locs = matches_1 + matches_2
+            
+            line_no = None
 
+            for path, line in reversed(traceback_locs):
+                # Skip pytest internals, stdlib
+                if any(skip in path for skip in ['site-packages', '<frozen', 'lib/python']):
+                    continue
+                
+                # Check if this file exists in our repo
+                full_path_candidate = path
+                if not os.path.isabs(path):
+                    full_path_candidate = os.path.join(repo_path, path)
+                
+                if os.path.exists(full_path_candidate):
+                     actual_file = os.path.relpath(full_path_candidate, repo_path)
+                     line_no = int(line)
+                     break
+            
             failures.append(TestFailure(
                 test_name="(collection error)",
                 file_path=actual_file,
                 error_message=error_msg,
                 error_type=error_type,
+                line_number=line_no,
                 raw_output=output,
             ))
 

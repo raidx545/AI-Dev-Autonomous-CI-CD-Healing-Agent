@@ -23,6 +23,7 @@ export default function FixesTable() {
                         <tr>
                             <th>File</th>
                             <th>Bug Type</th>
+                            <th>Line #</th>
                             <th>Commit</th>
                             <th>Status</th>
                         </tr>
@@ -37,6 +38,9 @@ export default function FixesTable() {
                                     <span className={`bug-type-badge bug-${fix.bug_type}`}>
                                         {fix.bug_type}
                                     </span>
+                                </td>
+                                <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
+                                    {fix.line_number || '-'}
                                 </td>
                                 <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                                     {fix.commit_message}

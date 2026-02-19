@@ -28,8 +28,11 @@ export default function CICDTimeline() {
                             <div className={`timeline-dot ${statusClass}`} />
                             <div className="timeline-content">
                                 <div className="timeline-header">
-                                    <div className="timeline-title">
+                                    <div className="timeline-title" style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                                         Iteration {it.iteration}
+                                        <span className={`badge ${isSuccess ? 'badge-passed' : 'badge-failed'}`}>
+                                            {isSuccess ? 'PASS' : 'FAIL'}
+                                        </span>
                                     </div>
                                     <div className="timeline-time">
                                         {new Date(it.timestamp).toLocaleTimeString()}

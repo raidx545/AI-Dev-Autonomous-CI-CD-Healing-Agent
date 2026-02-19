@@ -47,7 +47,10 @@ class GitOps:
         Stage and commit changes with [AI-AGENT] prefix.
         Returns the commit hash.
         """
-        prefixed_message = f"[AI-AGENT] {message}"
+        if message.startswith("[AI-AGENT]"):
+            prefixed_message = message
+        else:
+            prefixed_message = f"[AI-AGENT] {message}"
 
         if files:
             for f in files:
@@ -207,7 +210,14 @@ class GitOps:
         # Untracked files
         changed.extend(self.repo.untracked_files)
 
-        return list(set(changed))
+        # Filter out ignored patterns
+        ignored_patterns = ["__pycache__", ".pyc", ".DS_Store", ".venv", "venv"]
+        filtered = []
+        for f in changed:
+            if not any(ign in f for ign in ignored_patterns):
+                filtered.append(f)
+
+        return list(set(filtered))
 
     def _sanitize(self, name: str) -> str:
         """Sanitize a name for use in branch names — ALL UPPERCASE."""

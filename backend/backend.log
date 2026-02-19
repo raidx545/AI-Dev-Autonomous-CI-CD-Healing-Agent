@@ -1,0 +1,317 @@
+INFO:     Will watch for changes in these directories: ['/Users/raidx/Desktop/CodE/Projects/Rift2026/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     Started reloader process [91405] using WatchFiles
+INFO:     Started server process [91463]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:55790 - "POST /api/runs HTTP/1.1" 200 OK
+2026-02-20 00:01:09,459 [INFO] app.services.clone_service: Cloning https://github.com/ronakgarg2005/test_demo into /Users/raidx/.devops_agent/repos/test_demo
+2026-02-20 00:01:12,664 [INFO] app.services.clone_service: Successfully cloned to /Users/raidx/.devops_agent/repos/test_demo
+2026-02-20 00:01:12,874 [INFO] app.services.git_ops: Created and switched to branch: RONAK_COMMIT_TEST_4_RAIDX_AI_Fix
+2026-02-20 00:01:12,875 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 00:01:12,875 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 00:01:13,995 [INFO] app.services.fix_generator: Syntax/Indentation error detected in test.py. Targeting file itself.
+2026-02-20 00:01:13,995 [INFO] app.services.fix_generator: Syntax/Indentation error detected in test.py. Targeting file itself.
+2026-02-20 00:01:13,996 [INFO] app.services.fix_generator: Calling Sarvam AI (sarvam-m) for fix generation...
+2026-02-20 00:01:15,019 [INFO] httpx: HTTP Request: POST https://api.sarvam.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 00:01:15,022 [INFO] app.services.fix_generator: Fix applied successfully to test.py (bug_type=INDENTATION)
+2026-02-20 00:01:15,135 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix INDENTATION in test.py: IndentationError (29abef99)
+2026-02-20 00:01:15,136 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 00:01:15,136 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 00:01:16,095 [INFO] app.services.fix_generator: ModuleNotFoundError: 'math_util' fuzzy-matches 'math_utils.py' → fixing test.py import
+2026-02-20 00:01:16,095 [INFO] app.services.fix_generator: ModuleNotFoundError: 'math_util' fuzzy-matches 'math_utils.py' → fixing test.py import
+2026-02-20 00:01:16,096 [INFO] app.services.fix_generator: Programmatic import fix: 'math_util' → 'math_utils' in test.py
+2026-02-20 00:01:16,196 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix IMPORT in test.py: wrong module name 'math_util' (83020d50)
+2026-02-20 00:01:16,197 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 00:01:16,197 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 00:01:17,117 [INFO] app.services.git_ops: Set auth URL for push (token injected)
+2026-02-20 00:01:19,284 [INFO] app.services.git_ops: Pushed branch RONAK_COMMIT_TEST_4_RAIDX_AI_Fix to origin
+2026-02-20 00:01:21,760 [INFO] httpx: HTTP Request: POST https://api.github.com/repos/ronakgarg2005/test_demo/pulls "HTTP/1.1 201 Created"
+2026-02-20 00:01:21,950 [INFO] app.services.git_ops: Pull request created: https://github.com/ronakgarg2005/test_demo/pull/15
+2026-02-20 00:01:23,822 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/ronakgarg2005/test_demo/actions/workflows "HTTP/1.1 200 OK"
+2026-02-20 00:01:23,827 [INFO] app.agent: Written results.json to /Users/raidx/.devops_agent/repos/test_demo/results.json
+2026-02-20 00:01:23,827 [INFO] app.agent: [completed] Agent run complete! Status: unknown, Fixes: 2, Time: 14.9s
+INFO:     127.0.0.1:55977 - "POST /api/runs HTTP/1.1" 200 OK
+2026-02-20 00:17:23,517 [INFO] app.services.clone_service: Cloning https://github.com/ronakgarg2005/test_demo into /Users/raidx/.devops_agent/repos/test_demo
+2026-02-20 00:17:27,141 [INFO] app.services.clone_service: Successfully cloned to /Users/raidx/.devops_agent/repos/test_demo
+INFO:     127.0.0.1:55980 - "POST /api/runs HTTP/1.1" 200 OK
+2026-02-20 00:17:27,379 [INFO] app.services.clone_service: Cloning https://github.com/shashank-tomar0/demo_for_rift into /Users/raidx/.devops_agent/repos/demo_for_rift
+2026-02-20 00:17:29,708 [INFO] app.services.clone_service: Successfully cloned to /Users/raidx/.devops_agent/repos/demo_for_rift
+2026-02-20 00:17:31,434 [INFO] app.services.git_ops: Created and switched to branch: RONAK_FINAL_RAIDX_AI_Fix
+2026-02-20 00:17:31,461 [INFO] app.services.git_ops: Created and switched to branch: SHASHANK_FINAL_RAIDX_AI_Fix
+2026-02-20 00:17:31,462 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 00:17:31,462 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 00:17:32,701 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long
+2026-02-20 00:17:33,610 [INFO] app.services.fix_generator: Syntax/Indentation error detected in test.py. Targeting file itself.
+2026-02-20 00:17:33,611 [INFO] app.services.fix_generator: Syntax/Indentation error detected in test.py. Targeting file itself.
+2026-02-20 00:17:33,611 [INFO] app.services.fix_generator: Calling Sarvam AI (sarvam-m) for fix generation...
+2026-02-20 00:17:34,629 [INFO] httpx: HTTP Request: POST https://api.sarvam.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 00:17:34,630 [INFO] app.services.fix_generator: Fix applied successfully to test.py (bug_type=INDENTATION)
+2026-02-20 00:17:34,752 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix INDENTATION in test.py: IndentationError (00d89508)
+2026-02-20 00:17:34,753 [INFO] app.services.fix_generator: Found source via import (exact): /Users/raidx/.devops_agent/repos/demo_for_rift/app.py
+2026-02-20 00:17:34,754 [INFO] app.services.fix_generator: Found source via import (exact): /Users/raidx/.devops_agent/repos/demo_for_rift/app.py
+2026-02-20 00:17:34,754 [INFO] app.services.fix_generator: Calling Sarvam AI (sarvam-m) for fix generation...
+2026-02-20 00:17:36,187 [INFO] httpx: HTTP Request: POST https://api.sarvam.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 00:17:36,193 [INFO] app.services.fix_generator: Fix applied successfully to app.py (bug_type=LOGIC)
+2026-02-20 00:17:36,366 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix LOGIC in app.py: assert -1 == 5 (7e5aed37)
+2026-02-20 00:17:36,367 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 00:17:36,367 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 00:17:37,542 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long
+2026-02-20 00:17:38,394 [INFO] app.services.fix_generator: ModuleNotFoundError: 'math_util' fuzzy-matches 'math_utils.py' → fixing test.py import
+2026-02-20 00:17:38,396 [INFO] app.services.fix_generator: ModuleNotFoundError: 'math_util' fuzzy-matches 'math_utils.py' → fixing test.py import
+2026-02-20 00:17:38,396 [INFO] app.services.fix_generator: Programmatic import fix: 'math_util' → 'math_utils' in test.py
+2026-02-20 00:17:38,507 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix IMPORT in test.py: wrong module name 'math_util' (dc3c4441)
+2026-02-20 00:17:38,618 [INFO] app.services.git_ops: Set auth URL for push (token injected)
+2026-02-20 00:17:41,755 [INFO] app.services.git_ops: Pushed branch SHASHANK_FINAL_RAIDX_AI_Fix to origin
+2026-02-20 00:17:44,347 [INFO] httpx: HTTP Request: POST https://api.github.com/repos/shashank-tomar0/demo_for_rift/pulls "HTTP/1.1 201 Created"
+2026-02-20 00:17:44,696 [INFO] app.services.git_ops: Pull request created: https://github.com/shashank-tomar0/demo_for_rift/pull/11
+2026-02-20 00:17:44,698 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 00:17:44,698 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 00:17:45,781 [INFO] app.services.git_ops: Set auth URL for push (token injected)
+2026-02-20 00:17:49,986 [INFO] app.services.git_ops: Pushed branch RONAK_FINAL_RAIDX_AI_Fix to origin
+2026-02-20 00:17:51,914 [INFO] httpx: HTTP Request: POST https://api.github.com/repos/ronakgarg2005/test_demo/pulls "HTTP/1.1 201 Created"
+2026-02-20 00:17:51,984 [INFO] app.services.git_ops: Pull request created: https://github.com/ronakgarg2005/test_demo/pull/16
+2026-02-20 00:17:52,017 [ERROR] app.agent: Agent run failed
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_transports/default.py", line 72, in map_httpcore_exceptions
+    yield
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_transports/default.py", line 377, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        pool_request.request
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpcore/_async/connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpcore/_backends/anyio.py", line 113, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectTimeout
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/raidx/Desktop/CodE/Projects/Rift2026/backend/app/agent.py", line 82, in run
+    final_state = await agent_graph.ainvoke(initial_state, config=config)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/langgraph/pregel/main.py", line 3158, in ainvoke
+    async for chunk in self.astream(
+    ...<29 lines>...
+            chunks.append(chunk)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/langgraph/pregel/main.py", line 2971, in astream
+    async for _ in runner.atick(
+    ...<13 lines>...
+            yield o
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/langgraph/pregel/_runner.py", line 304, in atick
+    await arun_with_retry(
+    ...<15 lines>...
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/langgraph/pregel/_retry.py", line 137, in arun_with_retry
+    return await task.proc.ainvoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/langgraph/_internal/_runnable.py", line 705, in ainvoke
+    input = await asyncio.create_task(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        step.ainvoke(input, config, **kwargs), context=context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/langgraph/_internal/_runnable.py", line 473, in ainvoke
+    ret = await self.afunc(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raidx/Desktop/CodE/Projects/Rift2026/backend/app/graph/nodes.py", line 214, in monitor_node
+    has_workflows = await cicd_monitor.check_has_workflows(repo_url)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raidx/Desktop/CodE/Projects/Rift2026/backend/app/services/cicd_monitor.py", line 141, in check_has_workflows
+    resp = await client.get(url, headers=self.headers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_client.py", line 1814, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_client.py", line 1585, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_client.py", line 1674, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_client.py", line 1702, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_client.py", line 1739, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_client.py", line 1776, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_transports/default.py", line 376, in handle_async_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/httpx/_transports/default.py", line 89, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectTimeout
+During task with name 'monitor' and id '2a235d40-e7a6-954a-d51a-d3ac5ec41ab9'
+2026-02-20 00:17:52,028 [INFO] app.agent: [failed] Agent error: 
+2026-02-20 00:17:52,797 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/ronakgarg2005/test_demo/actions/workflows "HTTP/1.1 200 OK"
+2026-02-20 00:17:52,800 [INFO] app.agent: Written results.json to /Users/raidx/.devops_agent/repos/test_demo/results.json
+2026-02-20 00:17:52,800 [INFO] app.agent: [completed] Agent run complete! Status: unknown, Fixes: 2, Time: 29.3s
+INFO:     127.0.0.1:56012 - "POST /api/runs HTTP/1.1" 200 OK
+2026-02-20 00:18:48,066 [INFO] app.services.clone_service: Cloning https://github.com/shashank-tomar0/demo_for_rift into /Users/raidx/.devops_agent/repos/demo_for_rift
+2026-02-20 00:18:54,028 [INFO] app.services.clone_service: Successfully cloned to /Users/raidx/.devops_agent/repos/demo_for_rift
+2026-02-20 00:18:57,360 [INFO] app.services.git_ops: Created and switched to branch: SHASHANK_RETRY_RAIDX_AI_Fix
+2026-02-20 00:18:57,362 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long
+2026-02-20 00:18:58,463 [INFO] app.services.fix_generator: Found source via import (exact): /Users/raidx/.devops_agent/repos/demo_for_rift/app.py
+2026-02-20 00:18:58,464 [INFO] app.services.fix_generator: Found source via import (exact): /Users/raidx/.devops_agent/repos/demo_for_rift/app.py
+2026-02-20 00:18:58,464 [INFO] app.services.fix_generator: Calling Sarvam AI (sarvam-m) for fix generation...
+2026-02-20 00:19:01,307 [INFO] httpx: HTTP Request: POST https://api.sarvam.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 00:19:01,310 [INFO] app.services.fix_generator: Fix applied successfully to app.py (bug_type=LOGIC)
+2026-02-20 00:19:01,431 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix LOGIC in app.py: assert -1 == 5 (3d217104)
+2026-02-20 00:19:01,432 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long
+2026-02-20 00:19:02,389 [INFO] app.services.git_ops: Set auth URL for push (token injected)
+2026-02-20 00:19:04,008 [INFO] app.services.git_ops: Pushed branch SHASHANK_RETRY_RAIDX_AI_Fix to origin
+2026-02-20 00:19:06,377 [INFO] httpx: HTTP Request: POST https://api.github.com/repos/shashank-tomar0/demo_for_rift/pulls "HTTP/1.1 201 Created"
+2026-02-20 00:19:06,456 [INFO] app.services.git_ops: Pull request created: https://github.com/shashank-tomar0/demo_for_rift/pull/12
+2026-02-20 00:19:07,689 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/workflows "HTTP/1.1 200 OK"
+2026-02-20 00:19:09,242 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=SHASHANK_RETRY_RAIDX_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 00:19:09,243 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 00:19:22,474 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=SHASHANK_RETRY_RAIDX_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 00:19:22,476 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 00:19:33,339 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=SHASHANK_RETRY_RAIDX_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 00:19:33,343 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 00:19:45,531 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=SHASHANK_RETRY_RAIDX_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 00:19:45,534 [INFO] app.services.cicd_monitor: No workflow runs found after 30s, giving up.
+2026-02-20 00:19:45,540 [INFO] app.agent: Written results.json to /Users/raidx/.devops_agent/repos/demo_for_rift/results.json
+2026-02-20 00:19:45,541 [INFO] app.agent: [completed] Agent run complete! Status: unknown, Fixes: 1, Time: 57.5s
+INFO:     127.0.0.1:56078 - "POST /api/runs HTTP/1.1" 200 OK
+2026-02-20 00:22:53,871 [INFO] app.services.clone_service: Cloning https://github.com/shashank-tomar0/demo_for_rift into /Users/raidx/.devops_agent/repos/demo_for_rift
+2026-02-20 00:22:56,160 [INFO] app.services.clone_service: Successfully cloned to /Users/raidx/.devops_agent/repos/demo_for_rift
+INFO:     ('127.0.0.1', 56081) - "WebSocket /ws/7d4d584c" [accepted]
+2026-02-20 00:22:58,328 [INFO] app.main: WebSocket connected for run 7d4d584c
+INFO:     connection open
+2026-02-20 00:22:58,361 [INFO] app.services.git_ops: Created and switched to branch: FINAL2_RAIDX_AI_Fix
+2026-02-20 00:22:58,363 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long
+2026-02-20 00:22:59,495 [INFO] app.services.fix_generator: Found source via import (exact): /Users/raidx/.devops_agent/repos/demo_for_rift/app.py
+2026-02-20 00:22:59,497 [INFO] app.services.fix_generator: Found source via import (exact): /Users/raidx/.devops_agent/repos/demo_for_rift/app.py
+2026-02-20 00:22:59,497 [INFO] app.services.fix_generator: Calling Sarvam AI (sarvam-m) for fix generation...
+2026-02-20 00:23:01,028 [INFO] httpx: HTTP Request: POST https://api.sarvam.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 00:23:01,029 [INFO] app.services.fix_generator: Fix applied successfully to app.py (bug_type=LOGIC)
+2026-02-20 00:23:01,146 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix LOGIC in app.py: assert -1 == 5 (58d14391)
+2026-02-20 00:23:01,148 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long
+2026-02-20 00:23:02,283 [INFO] app.services.git_ops: Set auth URL for push (token injected)
+2026-02-20 00:23:04,652 [INFO] app.services.git_ops: Pushed branch FINAL2_RAIDX_AI_Fix to origin
+2026-02-20 00:23:06,970 [INFO] httpx: HTTP Request: POST https://api.github.com/repos/shashank-tomar0/demo_for_rift/pulls "HTTP/1.1 201 Created"
+2026-02-20 00:23:07,081 [INFO] app.services.git_ops: Pull request created: https://github.com/shashank-tomar0/demo_for_rift/pull/13
+2026-02-20 00:23:07,663 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/workflows "HTTP/1.1 200 OK"
+2026-02-20 00:23:08,317 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=FINAL2_RAIDX_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 00:23:08,318 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 00:23:19,088 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=FINAL2_RAIDX_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 00:23:19,094 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 00:23:30,411 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=FINAL2_RAIDX_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 00:23:30,413 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 00:23:41,970 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=FINAL2_RAIDX_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 00:23:41,971 [INFO] app.services.cicd_monitor: No workflow runs found after 30s, giving up.
+2026-02-20 00:23:41,977 [INFO] app.agent: Written results.json to /Users/raidx/.devops_agent/repos/demo_for_rift/results.json
+2026-02-20 00:23:41,978 [INFO] app.agent: [completed] Agent run complete! Status: unknown, Fixes: 1, Time: 48.2s
+INFO:     127.0.0.1:56103 - "GET /api/runs/7d4d584c HTTP/1.1" 200 OK
+2026-02-20 01:06:10,477 [INFO] app.main: WebSocket disconnected for run 7d4d584c
+INFO:     connection closed
+INFO:     127.0.0.1:56342 - "POST /api/runs HTTP/1.1" 200 OK
+2026-02-20 01:06:43,523 [INFO] app.services.clone_service: Cloning https://github.com/shashank-tomar0/demo_for_rift into /Users/raidx/.devops_agent/repos/demo_for_rift
+2026-02-20 01:06:47,022 [INFO] app.services.clone_service: Successfully cloned to /Users/raidx/.devops_agent/repos/demo_for_rift
+INFO:     ('127.0.0.1', 56345) - "WebSocket /ws/1aa4a831" [accepted]
+2026-02-20 01:06:49,717 [INFO] app.main: WebSocket connected for run 1aa4a831
+INFO:     connection open
+2026-02-20 01:06:49,752 [INFO] app.services.git_ops: Created and switched to branch: SKDJFAKL_DSAFASFD_AI_Fix
+2026-02-20 01:06:49,754 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long
+2026-02-20 01:06:50,850 [INFO] app.services.fix_generator: Found source via import (exact): /Users/raidx/.devops_agent/repos/demo_for_rift/app.py
+2026-02-20 01:06:50,851 [INFO] app.services.fix_generator: Found source via import (exact): /Users/raidx/.devops_agent/repos/demo_for_rift/app.py
+2026-02-20 01:06:50,851 [INFO] app.services.fix_generator: Calling Sarvam AI (sarvam-m) for fix generation...
+2026-02-20 01:06:53,748 [INFO] httpx: HTTP Request: POST https://api.sarvam.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 01:06:53,750 [INFO] app.services.fix_generator: Fix applied successfully to app.py (bug_type=LOGIC)
+2026-02-20 01:06:53,869 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix LOGIC in app.py: assert -1 == 5 (e4a18005)
+2026-02-20 01:06:53,871 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long
+2026-02-20 01:06:54,881 [INFO] app.services.git_ops: Set auth URL for push (token injected)
+2026-02-20 01:06:56,895 [INFO] app.services.git_ops: Pushed branch SKDJFAKL_DSAFASFD_AI_Fix to origin
+2026-02-20 01:06:58,859 [INFO] httpx: HTTP Request: POST https://api.github.com/repos/shashank-tomar0/demo_for_rift/pulls "HTTP/1.1 201 Created"
+2026-02-20 01:06:58,945 [INFO] app.services.git_ops: Pull request created: https://github.com/shashank-tomar0/demo_for_rift/pull/14
+2026-02-20 01:06:59,514 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/workflows "HTTP/1.1 200 OK"
+2026-02-20 01:07:00,081 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=SKDJFAKL_DSAFASFD_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 01:07:00,082 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 01:07:10,647 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=SKDJFAKL_DSAFASFD_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 01:07:10,648 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 01:07:22,440 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=SKDJFAKL_DSAFASFD_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 01:07:22,441 [INFO] app.services.cicd_monitor: No workflow runs found yet, waiting...
+2026-02-20 01:07:33,148 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/shashank-tomar0/demo_for_rift/actions/runs?branch=SKDJFAKL_DSAFASFD_AI_Fix&per_page=1 "HTTP/1.1 200 OK"
+2026-02-20 01:07:33,149 [INFO] app.services.cicd_monitor: No workflow runs found after 30s, giving up.
+2026-02-20 01:07:33,152 [INFO] app.agent: Written results.json to /Users/raidx/.devops_agent/repos/demo_for_rift/results.json
+2026-02-20 01:07:33,153 [INFO] app.agent: [completed] Agent run complete! Status: unknown, Fixes: 1, Time: 49.6s
+INFO:     127.0.0.1:56371 - "GET /api/runs/1aa4a831 HTTP/1.1" 200 OK
+2026-02-20 01:08:46,003 [INFO] app.main: WebSocket disconnected for run 1aa4a831
+INFO:     connection closed
+INFO:     127.0.0.1:56394 - "POST /api/runs HTTP/1.1" 200 OK
+2026-02-20 01:09:01,857 [INFO] app.services.clone_service: Cloning https://github.com/ronakgarg2005/test_demo into /Users/raidx/.devops_agent/repos/test_demo
+2026-02-20 01:09:03,345 [INFO] app.services.clone_service: Successfully cloned to /Users/raidx/.devops_agent/repos/test_demo
+INFO:     ('127.0.0.1', 56397) - "WebSocket /ws/b2bd227a" [accepted]
+2026-02-20 01:09:03,545 [INFO] app.main: WebSocket connected for run b2bd227a
+INFO:     connection open
+2026-02-20 01:09:03,573 [INFO] app.services.git_ops: Created and switched to branch: FINAL5_SDFSFSDF_AI_Fix
+2026-02-20 01:09:03,575 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 01:09:03,575 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 01:09:04,761 [INFO] app.services.fix_generator: Syntax/Indentation error detected in test.py. Targeting file itself.
+2026-02-20 01:09:04,762 [INFO] app.services.fix_generator: Syntax/Indentation error detected in test.py. Targeting file itself.
+2026-02-20 01:09:04,762 [INFO] app.services.fix_generator: Calling Sarvam AI (sarvam-m) for fix generation...
+2026-02-20 01:09:05,420 [INFO] httpx: HTTP Request: POST https://api.sarvam.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 01:09:05,422 [INFO] app.services.fix_generator: Fix applied successfully to test.py (bug_type=INDENTATION)
+2026-02-20 01:09:05,539 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix INDENTATION in test.py: IndentationError (49ea3723)
+2026-02-20 01:09:05,541 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 01:09:05,541 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 01:09:06,510 [INFO] app.services.fix_generator: ModuleNotFoundError: 'math_util' fuzzy-matches 'math_utils.py' → fixing test.py import
+2026-02-20 01:09:06,511 [INFO] app.services.fix_generator: ModuleNotFoundError: 'math_util' fuzzy-matches 'math_utils.py' → fixing test.py import
+2026-02-20 01:09:06,512 [INFO] app.services.fix_generator: Programmatic import fix: 'math_util' → 'math_utils' in test.py
+2026-02-20 01:09:06,610 [INFO] app.services.git_ops: Committed: [AI-AGENT] Fix IMPORT in test.py: wrong module name 'math_util' (6ad23f40)
+2026-02-20 01:09:06,612 [INFO] app.services.test_runner: Discovered test files: ['test.py']
+2026-02-20 01:09:06,612 [INFO] app.services.test_runner: Running tests: /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m pytest -v --tb=long test.py
+2026-02-20 01:09:07,586 [INFO] app.services.git_ops: Set auth URL for push (token injected)
+2026-02-20 01:09:09,505 [INFO] app.services.git_ops: Pushed branch FINAL5_SDFSFSDF_AI_Fix to origin
+2026-02-20 01:09:11,313 [INFO] httpx: HTTP Request: POST https://api.github.com/repos/ronakgarg2005/test_demo/pulls "HTTP/1.1 201 Created"
+2026-02-20 01:09:11,602 [INFO] app.services.git_ops: Pull request created: https://github.com/ronakgarg2005/test_demo/pull/17
+2026-02-20 01:09:13,546 [INFO] httpx: HTTP Request: GET https://api.github.com/repos/ronakgarg2005/test_demo/actions/workflows "HTTP/1.1 200 OK"
+2026-02-20 01:09:13,550 [INFO] app.agent: Written results.json to /Users/raidx/.devops_agent/repos/test_demo/results.json
+2026-02-20 01:09:13,552 [INFO] app.agent: [completed] Agent run complete! Status: unknown, Fixes: 2, Time: 11.7s
+INFO:     127.0.0.1:56408 - "GET /api/runs/b2bd227a HTTP/1.1" 200 OK
+2026-02-20 01:11:07,374 [INFO] app.main: WebSocket disconnected for run b2bd227a
+INFO:     connection closed

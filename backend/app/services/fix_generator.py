@@ -87,6 +87,7 @@ class FixGenerator:
                                 description=f"Fixed import: '{missing_name}' → '{real_module}'",
                                 bug_type=BugType.IMPORT,
                                 commit_message=f"[AI-AGENT] Fix IMPORT in {rel_path}: wrong module name '{missing_name}'",
+                                line_number=failure.line_number,
                                 status="fixed",
                             )
                     except Exception as e:
@@ -154,6 +155,7 @@ class FixGenerator:
                     description=f"Fix for {failure.test_name}: {failure.error_type}",
                     bug_type=bug_type,
                     commit_message=commit_msg,
+                    line_number=failure.line_number,
                     status="fixed",
                 )
             else:
@@ -322,6 +324,7 @@ class FixGenerator:
                     description=f"Fixed {len(failures)} error(s): {error_types_str}",
                     bug_type=bug_type,
                     commit_message=commit_msg,
+                    line_number=failures[0].line_number if failures else None,
                     status="fixed",
                 )
             else:

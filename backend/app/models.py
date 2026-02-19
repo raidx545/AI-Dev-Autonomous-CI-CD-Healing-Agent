@@ -71,6 +71,7 @@ class FileChange(BaseModel):
     diff: str = ""
     description: str = ""
     bug_type: BugType = BugType.UNKNOWN
+    line_number: Optional[int] = None
     commit_message: str = ""
     status: str = "fixed"  # "fixed" or "failed"
 
