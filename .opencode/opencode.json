@@ -1,0 +1,10 @@
+{
+  "permission": {
+    "read": {
+      "/Users/raidx/Desktop/CodE/Projects/Rift2026/.opencode/get-shit-done/*": "allow"
+    },
+    "external_directory": {
+      "/Users/raidx/Desktop/CodE/Projects/Rift2026/.opencode/get-shit-done/*": "allow"
+    }
+  }
+}
