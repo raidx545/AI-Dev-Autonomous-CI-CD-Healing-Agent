@@ -8,6 +8,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![Sarvam AI](https://img.shields.io/badge/Sarvam_AI-sarvam--m-FF6B35?logo=data:image/svg+xml;base64,&logoColor=white)](https://sarvam.ai)
 
 </div>
 
@@ -38,15 +39,15 @@ Give the agent a **GitHub repository URL** → it clones, tests, fixes bugs with
 │  InputForm │ RunSummary │ PipelineLogs │ DiffViewer   │
 │                         ▲ WebSocket                   │
 ├──────────────────────────────────────────────────────┤
-│               FastAPI Backend (:8080)                  │
-│                 Agent Orchestrator                     │
+│              FastAPI Backend (:8080)                   │
+│                Agent Orchestrator                      │
 │  clone → analyze → test → fix → retest → push → CI   │
 ├──────────────────────────────────────────────────────┤
 │  CloneService  TestRunner  FixGenerator  CICDMonitor  │
-│              GitOps    Sarvam AI API                   │
+│           GitOps     Sarvam AI (sarvam-m)              │
 └──────────────────────────────────────────────────────┘
         │              │                │
-   GitHub Repo    Sarvam AI API   GitHub Actions
+   GitHub Repo   Sarvam AI API   GitHub Actions
 ```
 
 ---
@@ -65,7 +66,13 @@ Give the agent a **GitHub repository URL** → it clones, tests, fixes bugs with
 git clone https://github.com/raidx545/AI-Dev-Autonomous-CI-CD-Healing-Agent.git
 cd AI-Dev-Autonomous-CI-CD-Healing-Agent
 cp .env.example .env
-# Edit .env with your actual keys
+```
+
+Edit `.env` with your actual keys:
+```env
+GITHUB_TOKEN=ghp_your_personal_access_token
+SARVAM_API_KEY=your_sarvam_api_key
+MAX_ITERATIONS=5
 ```
 
 ### 2. Start Backend
@@ -189,17 +196,21 @@ Rift2026/
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `GITHUB_TOKEN` | ✅ | GitHub PAT with `repo` scope |
-| `SARVAM_API_KEY` | ✅ | Sarvam AI API key for fix generation |
-| `MAX_ITERATIONS` | ❌ | Max fix attempts per run (default: 5) |
+| `GITHUB_TOKEN` | ✅ | GitHub Personal Access Token with `repo` scope (for cloning, pushing, and PR creation) |
+| `SARVAM_API_KEY` | ✅ | [Sarvam AI](https://sarvam.ai) API key — powers the `sarvam-m` model for intelligent code fix generation |
+| `MAX_ITERATIONS` | ❌ | Maximum fix-retest cycles per run (default: `5`) |
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Backend:** Python · FastAPI · Uvicorn · GitPython · Pydantic · httpx · Sarvam AI  
-**Frontend:** React 19 · Vite 6 · Framer Motion · Lucide Icons · Axios  
-**Infrastructure:** GitHub Actions · WebSocket · REST API
+| Layer | Technologies |
+|-------|-------------|
+| **Backend** | Python 3.11+ · FastAPI · Uvicorn · GitPython · Pydantic · httpx |
+| **AI Engine** | [Sarvam AI](https://sarvam.ai) (`sarvam-m` model) via REST API |
+| **Frontend** | React 19 · Vite 6 · Framer Motion · Lucide React · Axios |
+| **Real-time** | WebSocket (native) · Server-Sent Events |
+| **CI/CD** | GitHub Actions API · GitHub REST API v3 |
 
 ---
 
@@ -229,10 +240,9 @@ Rift2026/
 
 ---
 
-## 👥 Team
+## � License
 
-- **Team Name:** raidx4435
-- **Team Leader:** shanky
+This project was built for **RIFT 2026** — an AI-powered DevOps hackathon.
 
 ---
 
