@@ -1,101 +1,244 @@
-# RIFT 2026 — Autonomous DevOps Agent 🚀
+<![CDATA[<div align="center">
 
-An autonomous AI agent that fixes build/test failures in GitHub repositories. Built for the Rift 2026 competition.
+# 🤖 RIFT 2026 — Autonomous DevOps Agent
 
-![Dashboard Preview](./dashboard-preview.png)
+**AI-powered CI/CD pipeline healer that automatically detects, diagnoses, and fixes failing tests.**
 
-## 🌟 Features
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
 
-- **Autonomous Debugging**: Clones, tests, detects failures, and generates AI fixes using **Sarvam AI** (OpenAI-compatible).
-- **Glassmorphism Dashboard**: Premium React + Vite UI with real-time logs and visualizations.
-- **Smart Branching**: Creates `TEAM_LEADER_AI_Fix` branches and pushes fixes automatically.
-- **CI/CD Monitoring**: Watches GitHub Actions pipelines and iterates until green.
-- **Live Updates**: WebSocket-based real-time terminal logs and status updates.
-- **Scoring System**: Calculates score based on speed and efficiency (starts at 100).
+</div>
 
-## 🛠️ Tech Stack
+---
 
-- **Backend**: Python 3.11+, FastAPI, GitPython, Pytest, Pydantic
-- **Frontend**: React 19, Vite, Tailwind-style CSS (custom), Framer Motion
-- **AI Provider**: Sarvam AI (`sarvam-m` model)
-- **Database**: In-memory (with `results.json` persistence per repo)
+## � What It Does
 
-## 🚀 Getting Started
+Give the agent a **GitHub repository URL** → it clones, tests, fixes bugs with AI, pushes a fix branch, and monitors CI/CD — all autonomously.
+
+```
+📦 Clone Repo → 🔍 Run Tests → 🤖 AI Fix → ✅ Retest → 🚀 Push & PR → 📊 Monitor CI
+```
+
+### Key Capabilities
+- **Multi-language support** — Python (pytest), JavaScript (jest/vitest), Go, Java (Maven)
+- **Smart error targeting** — Syntax errors, import errors, logic bugs, NameErrors
+- **Iterative healing** — Up to 5 fix attempts per run with re-testing between each
+- **Real-time dashboard** — WebSocket-powered live logs, diffs, and pipeline status
+- **GitHub integration** — Auto-creates branches (`TEAM_LEADER_AI_Fix`), commits with `[AI-AGENT]` prefix, opens PRs, monitors GitHub Actions
+
+---
+
+## 🏗️ Architecture
+
+```
+┌──────────────────────────────────────────────────────┐
+│              React Dashboard (Vite :5173)             │
+│  InputForm │ RunSummary │ PipelineLogs │ DiffViewer   │
+│                         ▲ WebSocket                   │
+├──────────────────────────────────────────────────────┤
+│               FastAPI Backend (:8080)                  │
+│                 Agent Orchestrator                     │
+│  clone → analyze → test → fix → retest → push → CI   │
+├──────────────────────────────────────────────────────┤
+│  CloneService  TestRunner  FixGenerator  CICDMonitor  │
+│              GitOps    Sarvam AI API                   │
+└──────────────────────────────────────────────────────┘
+        │              │                │
+   GitHub Repo    Sarvam AI API   GitHub Actions
+```
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 - Python 3.11+
 - Node.js 18+
-- GitHub Account (and a fine-grained PAT with `Contents: Read & Write` permissions)
+- GitHub Personal Access Token (with `repo` scope)
 - Sarvam AI API Key
 
-### 1. Backend Setup
+### 1. Clone & Configure
+
+```bash
+git clone https://github.com/raidx545/AI-Dev-Autonomous-CI-CD-Healing-Agent.git
+cd AI-Dev-Autonomous-CI-CD-Healing-Agent
+cp .env.example .env
+# Edit .env with your actual keys
+```
+
+### 2. Start Backend
 
 ```bash
 cd backend
-python3 -m venv venv
-source venv/bin/activate
 pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Edit .env and add your SARVAM_API_KEY and GITHUB_TOKEN
+python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload
 ```
 
-### 2. Frontend Setup
+### 3. Start Frontend
 
 ```bash
 cd frontend
 npm install
+npm run dev -- --port 5173
 ```
 
-### 3. Running the Application
+### 4. Run the Agent
 
-**Start the Backend (Port 8080):**
+Open `http://localhost:5173` in your browser, enter a GitHub repo URL, team name, and leader name, then click **Run Agent**.
+
+Or via API:
 ```bash
-cd backend
-python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload
+curl -X POST http://localhost:8080/api/runs \
+  -H "Content-Type: application/json" \
+  -d '{"repo_url":"https://github.com/owner/repo","team_name":"MyTeam","leader_name":"MyName"}'
 ```
 
-**Start the Dashboard (Port 5173):**
-```bash
-cd frontend
-npm run dev
+---
+
+## 📡 API Reference
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | Service info |
+| `GET` | `/health` | Health check |
+| `POST` | `/api/runs` | Start a new agent run |
+| `GET` | `/api/runs/{run_id}` | Get run status & summary |
+| `GET` | `/api/runs` | List all runs |
+| `WS` | `/ws/{run_id}` | Real-time event stream |
+
+### WebSocket Events
+| Event | Description |
+|-------|-------------|
+| `phase_change` | Agent moved to a new phase (cloning, testing, fixing...) |
+| `log` | Informational message |
+| `error` | Something went wrong |
+| `ping` | Keepalive |
+
+---
+
+## 🧠 How the Agent Works
+
+```mermaid
+flowchart TD
+    A[📦 Clone Repo] --> B[🔍 Analyze Structure]
+    B --> C[📥 Install Dependencies]
+    C --> D[🌿 Create Fix Branch]
+    D --> E[🧪 Run Tests]
+    E -->|All Pass| J[✅ Commit & Push]
+    E -->|Failures| F[🔎 Parse Failures]
+    F --> G[� Locate Source File]
+    G --> H[🤖 AI Generate Fix]
+    H --> I[🔧 Apply & Retest]
+    I -->|Pass| J
+    I -->|Fail & iterations < 5| F
+    I -->|Max iterations| K[❌ Report Failure]
+    J --> L[🚀 Create Pull Request]
+    L --> M[📊 Monitor CI/CD]
 ```
 
-Open **http://localhost:5173** in your browser.
+### Smart Error Resolution
 
-## 🎯 How to Use
+| Error Type | Strategy | Action |
+|------------|----------|--------|
+| `SyntaxError` / `IndentationError` | Strategy -1 | Fix the file itself (highest priority) |
+| `ModuleNotFoundError` | Strategy 0 | Fix imports in the test file |
+| `NameError` (missing import) | Strategy 0b | Add missing import to test file |
+| `AssertionError` / Logic bugs | Strategy 1-4 | AI-powered fix on the source module |
 
-1. Enter the **GitHub Repository URL** (e.g., `https://github.com/username/broken-repo`).
-2. Enter your **Team Name** and **Leader Name**.
-3. (Optional) Provide a GitHub Token if the repo is private or to unlock higher rate limits.
-4. Click **Run Agent**.
-5. Watch the agent clone, analyze, test, and fix bugs in real-time!
-6. Once complete, view the **Score Breakdown**, **Fixes Table**, and **CI/CD Timeline**.
+---
 
-## 📊 Scoring System
-
-- **Base Score**: 100 points
-- **Speed Bonus**: +10 points if completed in < 5 minutes
-- **Efficiency Penalty**: -2 points per commit over 20 commits
-- **Final Score**: Calculated automatically at the end of the run.
-
-## 📁 Project Structure
+## � Project Structure
 
 ```
 Rift2026/
-├── backend/            # FastAPI Agent
-│   ├── app/
-│   │   ├── agent.py    # Core logic (Clone -> Test -> Fix -> Push)
-│   │   ├── services/   # Git, TestRunner, FixGenerator (Sarvam AI)
-│   │   └── main.py     # API & WebSocket endpoints
-│   └── requirements.txt
-├── frontend/           # React Dashboard
-│   ├── src/components/ # Glassmorphism UI components
-│   └── context/        # State management
-└── results.json        # Generated results for the last run
+├── .env.example              # Environment template
+├── backend/
+│   ├── requirements.txt      # Python dependencies
+│   └── app/
+│       ├── config.py         # Pydantic settings
+│       ├── models.py         # Data models
+│       ├── agent.py          # Core orchestrator
+│       ├── main.py           # FastAPI app + WebSocket
+│       └── services/
+│           ├── clone_service.py   # Git clone + detection
+│           ├── test_runner.py     # Test execution & parsing
+│           ├── fix_generator.py   # AI fix generation
+│           ├── git_ops.py         # Branch, commit, push
+│           └── cicd_monitor.py    # GitHub Actions polling
+└── frontend/
+    ├── package.json
+    └── src/
+        ├── App.jsx
+        ├── index.css              # Dark glassmorphism theme
+        ├── context/AgentContext.jsx
+        ├── hooks/useWebSocket.js
+        └── components/
+            ├── InputForm.jsx
+            ├── RunSummaryCard.jsx
+            ├── PipelineLogs.jsx
+            ├── IterationTimeline.jsx
+            ├── DiffViewer.jsx
+            └── CICDStatus.jsx
 ```
 
-## 📜 License
+---
 
-MIT License. Created for Rift 2026.
+## ⚙️ Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GITHUB_TOKEN` | ✅ | GitHub PAT with `repo` scope |
+| `SARVAM_API_KEY` | ✅ | Sarvam AI API key for fix generation |
+| `MAX_ITERATIONS` | ❌ | Max fix attempts per run (default: 5) |
+
+---
+
+## 🛠️ Tech Stack
+
+**Backend:** Python · FastAPI · Uvicorn · GitPython · Pydantic · httpx · Sarvam AI  
+**Frontend:** React 19 · Vite 6 · Framer Motion · Lucide Icons · Axios  
+**Infrastructure:** GitHub Actions · WebSocket · REST API
+
+---
+
+## � Example Output
+
+```json
+{
+  "total_failures_detected": 1,
+  "total_fixes_applied": 1,
+  "cicd_status": "passed",
+  "total_time_seconds": 42.76,
+  "score": {
+    "base_score": 100,
+    "speed_bonus": 10,
+    "final_score": 110
+  },
+  "fixes": [
+    {
+      "file": "math_utils.py",
+      "bug_type": "LOGIC",
+      "commit_message": "[AI-AGENT] Fix LOGIC in math_utils.py",
+      "status": "fixed"
+    }
+  ]
+}
+```
+
+---
+
+## 👥 Team
+
+- **Team Name:** raidx4435
+- **Team Leader:** shanky
+
+---
+
+<div align="center">
+
+**Built with ❤️ for RIFT 2026**
+
+</div>
+]]>
