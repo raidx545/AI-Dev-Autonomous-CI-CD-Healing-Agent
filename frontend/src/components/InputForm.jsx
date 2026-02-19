@@ -18,7 +18,8 @@ export default function InputForm() {
         setLoading(true)
 
         try {
-            const response = await axios.post('/api/runs', formData)
+            const baseUrl = import.meta.env.VITE_API_BASE_URL || ''
+            const response = await axios.post(`${baseUrl}/api/runs`, formData)
             startRun(response.data.run_id)
         } catch (error) {
             console.error('Failed to start run:', error)
