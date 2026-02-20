@@ -84,7 +84,7 @@ class TestRunner:
                 )
                 outputs.append(f"pip install -e .: {result['output']}")
 
-            # Ensure pytest is available
+            # Always ensure pytest is available for Python repos
             check = self._run_cmd([python_exe, "-m", "pytest", "--version"], cwd=repo_path)
             if not check["success"]:
                 logger.info("pytest not found, installing...")
@@ -190,6 +190,10 @@ class TestRunner:
                 return ["npx", "vitest", "run", "--reporter=verbose"]
             if "mocha" in test_frameworks:
                 return ["npx", "mocha", "--recursive"]
+                
+            # Default fallback for JS/TS
+            logger.info("No explicit JS test framework found. Falling back to vitest.")
+            return ["npx", "vitest", "run", "--passWithNoTests"]
 
         # Go
         if "go" in languages:

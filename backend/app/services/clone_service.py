@@ -155,6 +155,11 @@ class CloneService:
         # Fallback: if there are ANY python files, assume pytest as the default test runner
         if "pytest" not in detected and any(f.endswith(".py") for f in all_files):
             detected.append("pytest")
+            
+        # Fallback: if there are ANY js/ts files, assume vitest as the default test runner
+        if not any(fw in detected for fw in ["jest", "mocha", "vitest"]):
+            if any(f.endswith(ext) for f in all_files for ext in [".js", ".jsx", ".ts", ".tsx"]):
+                detected.append("vitest")
 
         return list(set(detected)) if detected else ["unknown"]
 
