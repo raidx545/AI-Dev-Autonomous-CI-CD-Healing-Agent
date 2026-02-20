@@ -24,7 +24,7 @@ export default function FixesTable() {
                             <th>File</th>
                             <th>Bug Type</th>
                             <th>Line #</th>
-                            <th>Commit</th>
+                            <th>Output Details</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -43,7 +43,7 @@ export default function FixesTable() {
                                     {fix.line_number || '-'}
                                 </td>
                                 <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                                    {fix.commit_message}
+                                    {fix.dashboard_output || fix.commit_message}
                                 </td>
                                 <td>
                                     <span className={`status-${fix.status}`}>

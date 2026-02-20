@@ -154,6 +154,7 @@ class Agent:
                         "bug_type": change.bug_type.value if hasattr(change.bug_type, 'value') else change.bug_type,
                         "line_number": change.line_number,
                         "commit_message": change.commit_message,
+                        "dashboard_output": change.dashboard_output,
                         "status": change.status,
                     }
                     for change in summary.all_changes

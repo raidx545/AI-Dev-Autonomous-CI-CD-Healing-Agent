@@ -73,6 +73,7 @@ class FileChange(BaseModel):
     bug_type: BugType = BugType.UNKNOWN
     line_number: Optional[int] = None
     commit_message: str = ""
+    dashboard_output: str = ""
     status: str = "fixed"  # "fixed" or "failed"
 
 
