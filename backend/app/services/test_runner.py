@@ -165,6 +165,9 @@ class TestRunner:
                 rel_files = [os.path.relpath(f, repo_path) for f in test_files]
                 logger.info(f"Discovered test files: {rel_files}")
                 return [sys.executable, "-m", "pytest", "-v", "--tb=long"] + rel_files
+            
+            # If our strict string matching failed, let pytest try to find them itself
+            logger.info("No test files found via strict matching. Falling back to native pytest discovery.")
             return [sys.executable, "-m", "pytest", "-v", "--tb=long"]
 
         # JavaScript / TypeScript
