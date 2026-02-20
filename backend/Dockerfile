@@ -18,8 +18,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the backend application code
 COPY . .
 
-# Expose the port Render uses
+# Note: Render dynamically assigns a port via the PORT environment variable.
+# We expose 8080 as a fallback for local development.
 EXPOSE 8080
 
-# Command to run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Command to run the application using the start script
+CMD ["./start.sh"]
