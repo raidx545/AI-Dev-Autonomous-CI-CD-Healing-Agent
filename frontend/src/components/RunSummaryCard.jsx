@@ -1,5 +1,5 @@
 import React from 'react'
-import { GitBranch, Clock, AlertCircle, CheckCircle } from 'lucide-react'
+import { GitBranch, Clock, AlertCircle, CheckCircle, Download } from 'lucide-react'
 import { useAgent } from '../context/AgentContext'
 
 export default function RunSummaryCard() {
@@ -26,8 +26,29 @@ export default function RunSummaryCard() {
         }
     }
 
+    const handleDownload = async () => {
+        if (!state.runId) return
+        try {
+            const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+            const response = await fetch(`${baseUrl}/api/runs/${state.runId}`)
+            if (!response.ok) throw new Error('Failed to fetch results')
+            const data = await response.json()
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `rift_results_${state.runId}.json`
+            document.body.appendChild(a)
+            a.click()
+            document.body.removeChild(a)
+            URL.revokeObjectURL(url)
+        } catch (error) {
+            console.error('Download failed:', error)
+        }
+    }
+
     return (
-        <div className="glass-card summary-card">
+        <div className="glass-card summary-card" style={{ position: 'relative' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                     <h2 className="section-title">Run Summary</h2>
@@ -65,6 +86,25 @@ export default function RunSummaryCard() {
                     <div className="stat-value mono">{fixes > 0 ? (time / fixes).toFixed(1) : 0}s</div>
                 </div>
             </div>
+
+            {status === 'success' && (
+                <button
+                    onClick={handleDownload}
+                    className="run-btn"
+                    style={{
+                        marginTop: '1.5rem',
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        padding: '0.6rem'
+                    }}
+                >
+                    <Download size={16} />
+                    Download results.json
+                </button>
+            )}
         </div>
     )
 }
