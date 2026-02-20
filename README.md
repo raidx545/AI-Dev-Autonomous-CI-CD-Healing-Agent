@@ -79,24 +79,32 @@ RIFT 2026 is an intelligent, self-healing CI/CD pipeline agent. It automates the
 
 The system consists of a FastAPI backend orchestrator and a React frontend dashboard, communicating via WebSockets for real-time updates.
 
-```mermaid
-graph TD
-    User[User Dashboard] -->|Start Run| Backend[FastAPI Backend]
-    Backend -->|Clone| Git[Git Service]
-    Backend -->|Run Tests| Runner[Test Runner]
-    Runner -->|Failures| Analyzer[Error Analyzer]
-    Analyzer -->|Context| AI[Sarvam AI]
-    AI -->|Fix Code| Patcher[Code Patcher]
-    Patcher -->|Verify| Runner
-    Runner -->|Success| GitOps[Git Operations]
-    GitOps -->|Push & PR| GitHub[GitHub API]
-    
-    subgraph "Agent Loop"
-    Runner
-    Analyzer
-    AI
-    Patcher
-    end
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                    React Dashboard (Vite)                     │
+│  ┌──────────┐ ┌────────────┐ ┌──────────┐ ┌──────────────┐  │
+│  │InputForm │ │RunSummary  │ │Pipeline  │ │  DiffViewer  │  │
+│  │          │ │Card        │ │Logs      │ │              │  │
+│  └────┬─────┘ └────────────┘ └──────────┘ └──────────────┘  │
+│       │            ▲              ▲              ▲            │
+│       │            └──────────────┴──────────────┘            │
+│       ▼                    WebSocket                         │
+├─────────────────────────────────────────────────────────────┤
+│                    FastAPI Backend (:8000)                    │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │                  Agent Orchestrator                     │  │
+│  │  clone → analyze → test → fix → retest → commit/push  │  │
+│  └────────────────────────────────────────────────────────┘  │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐  │
+│  │Clone     │ │Test      │ │Fix       │ │ CI/CD        │  │
+│  │Service   │ │Runner    │ │Generator │ │ Monitor      │  │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────────┘  │
+│  ┌──────────┐                                              │
+│  │Git Ops   │                                              │
+│  └──────────┘                                              │
+└─────────────────────────────────────────────────────────────┘
+         │               │                    │
+    GitHub Repo      Gemini API         GitHub Actions API
 ```
 
 ---
