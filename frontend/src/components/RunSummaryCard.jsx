@@ -87,7 +87,7 @@ export default function RunSummaryCard() {
                 </div>
             </div>
 
-            {status === 'success' && (
+            {status === 'completed' && (
                 <button
                     onClick={handleDownload}
                     className="run-btn"
