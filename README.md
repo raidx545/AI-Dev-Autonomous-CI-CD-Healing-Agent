@@ -79,32 +79,56 @@ RIFT 2026 is an intelligent, self-healing CI/CD pipeline agent. It automates the
 
 The system consists of a FastAPI backend orchestrator and a React frontend dashboard, communicating via WebSockets for real-time updates.
 
-```text
-┌─────────────────────────────────────────────────────────────┐
-│                    React Dashboard (Vite)                     │
-│  ┌──────────┐ ┌────────────┐ ┌──────────┐ ┌──────────────┐  │
-│  │InputForm │ │RunSummary  │ │Pipeline  │ │  DiffViewer  │  │
-│  │          │ │Card        │ │Logs      │ │              │  │
-│  └────┬─────┘ └────────────┘ └──────────┘ └──────────────┘  │
-│       │            ▲              ▲              ▲            │
-│       │            └──────────────┴──────────────┘            │
-│       ▼                    WebSocket                         │
-├─────────────────────────────────────────────────────────────┤
-│                    FastAPI Backend (:8000)                    │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │                  Agent Orchestrator                     │  │
-│  │  clone → analyze → test → fix → retest → commit/push  │  │
-│  └────────────────────────────────────────────────────────┘  │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐  │
-│  │Clone     │ │Test      │ │Fix       │ │ CI/CD        │  │
-│  │Service   │ │Runner    │ │Generator │ │ Monitor      │  │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────────┘  │
-│  ┌──────────┐                                              │
-│  │Git Ops   │                                              │
-│  └──────────┘                                              │
-└─────────────────────────────────────────────────────────────┘
-         │               │                    │
-    GitHub Repo      Gemini API         GitHub Actions API
+```mermaid
+graph TD
+    subgraph "FastAPI Backend"
+        REST[REST API]
+        WSServer[WebSocket Server]
+        Orchestrator[Agent Orchestrator]
+        Clone[Clone Service]
+        Analyzer[Repo Analyzer]
+        Runner[Test Runner]
+        Parser[Failure Parser]
+        AIGen[AI Fix Generator]
+        GitOps[Git Operations]
+        Monitor[CI/CD Monitor]
+        
+        REST --> Orchestrator
+        Orchestrator --> Clone
+        Orchestrator --> Analyzer
+        Orchestrator --> Runner
+        Orchestrator --> Parser
+        Orchestrator --> AIGen
+        Orchestrator --> GitOps
+        Orchestrator --> Monitor
+    end
+
+    subgraph "React Dashboard (Vite)"
+        InputForm[Input Form]
+        WSClient[WebSocket Client]
+        RunSummary[Run Summary Card]
+        Logs[Pipeline Logs]
+        Timeline[Iteration Timeline]
+        Diffs[Diff Viewer]
+        Badge[CI/CD Status Badge]
+        
+        InputForm --> WSClient
+        WSClient --> RunSummary
+        WSClient --> Logs
+        WSClient --> Timeline
+        WSClient --> Diffs
+        WSClient --> Badge
+    end
+
+    LocalClone[(Local Clone)]
+    AIAPI[(AI API)]
+    GitHub[(GitHub)]
+
+    WSServer <--> WSClient
+    Clone --> LocalClone
+    AIGen --> AIAPI
+    GitOps --> GitHub
+    Monitor --> GitHub
 ```
 
 ---
