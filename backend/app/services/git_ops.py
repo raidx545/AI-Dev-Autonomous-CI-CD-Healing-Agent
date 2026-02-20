@@ -140,19 +140,24 @@ class GitOps:
         Push the branch to the remote origin.
         Injects the GitHub token for authentication.
         """
-        try:
-            origin = self.repo.remote("origin")
-            original_url = origin.url
+        import re as _re
+        from git.exc import GitCommandError
+        
+        origin = self.repo.remote("origin")
+        original_url = origin.url
+        clean_restore = original_url
 
+        try:
             # Always rebuild auth URL from scratch
             if self.token and "github.com" in original_url:
-                import re as _re
                 # Strip any existing credentials from URL
                 clean_url = _re.sub(
                     r"https://[^@]+@github\.com",
                     "https://github.com",
                     original_url,
                 )
+                clean_restore = clean_url
+                
                 # Inject current token
                 auth_url = clean_url.replace(
                     "https://github.com",
@@ -163,34 +168,21 @@ class GitOps:
 
             origin.push(branch_name, force=True)
             logger.info(f"Pushed branch {branch_name} to origin")
-
-            # Restore original URL (without token) for safety
-            clean_restore = original_url
-            if "@github.com" in original_url:
-                import re as _re
-                clean_restore = _re.sub(
-                    r"https://[^@]+@github\.com",
-                    "https://github.com",
-                    original_url,
-                )
-            self.repo.git.remote("set-url", "origin", clean_restore)
-
             return True
 
+        except GitCommandError as e:
+            logger.error(f"Git push failed: {e}")
+            return False
         except Exception as e:
-            logger.error(f"Push failed: {e}")
-            # Try to restore clean URL even on failure
+            logger.error(f"Unexpected push error: {e}")
+            return False
+            
+        finally:
+            # Restore original URL (without token) for safety
             try:
-                import re as _re
-                clean = _re.sub(
-                    r"https://[^@]+@github\.com",
-                    "https://github.com",
-                    self.repo.remote("origin").url,
-                )
-                self.repo.git.remote("set-url", "origin", clean)
+                self.repo.git.remote("set-url", "origin", clean_restore)
             except Exception:
                 pass
-            return False
 
     def get_changed_files(self) -> list[str]:
         """Get list of files with uncommitted changes."""
