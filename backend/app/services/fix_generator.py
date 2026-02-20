@@ -477,35 +477,49 @@ class FixGenerator:
         # If the file has a syntax error, we must fix IT, not its imports.
         # Check error_type and error_message for syntax/indentation markers.
         err_lower = (failure.error_message + " " + failure.error_type).lower()
-        if any(k in err_lower for k in ["indentationerror", "syntaxerror", "taberror", "unexpected indent", "unindent", "invalid syntax"]):
+        if any(k in err_lower for k in ["indentationerror", "syntaxerror", "taberror", "unexpected indent", "unindent", "invalid syntax", "unexpected token"]):
             if test_file_abs and os.path.exists(test_file_abs):
                 logger.info(f"Syntax/Indentation error detected in {test_file}. Targeting file itself.")
                 return test_file_abs
 
         # ── Strategy 0: ModuleNotFoundError — fix the test file's import ─
-        # Search error_message, error_type AND raw_output for "No module named 'xxx'"
+        # Search error_message, error_type AND raw_output for "No module named 'xxx'" or "Cannot find module 'xxx'"
         all_error_text = (failure.error_message + " " + failure.error_type + " " + failure.raw_output).lower()
+        
+        missing_name = None
+        # Python
         if "modulenotfounderror" in all_error_text or ("importerror" in all_error_text and "no module" in all_error_text):
             missing = re.search(r"no module named ['\"]?([\w.]+)['\"]?", all_error_text)
-            if missing:
-                missing_name = missing.group(1).split(".")[-1]
-                for root, dirs, files in os.walk(repo_path):
-                    dirs[:] = [d for d in dirs if not d.startswith(".") and d not in
-                               ["node_modules", "__pycache__", "venv", ".venv"]]
-                    for f in files:
-                        if not f.endswith(".py") or f.startswith("test") or "test" in f:
-                            continue
-                        stem = f[:-3]
-                        if stem.startswith(missing_name) or missing_name.startswith(stem):
-                            # The import is wrong in the test file — fix test.py
-                            test_py = os.path.join(repo_path, "test.py")
-                            if os.path.exists(test_py):
-                                logger.info(f"ModuleNotFoundError: '{missing_name}' fuzzy-matches '{f}' → fixing test.py import")
-                                return test_py
-                            for r2, d2, files2 in os.walk(repo_path):
-                                for tf in files2:
-                                    if tf.startswith("test") and tf.endswith(".py"):
-                                        return os.path.join(r2, tf)
+            if missing: missing_name = missing.group(1).split(".")[-1]
+        
+        # JavaScript/TypeScript
+        if not missing_name and "cannot find module" in all_error_text:
+            missing = re.search(r"cannot find module ['\"]?([\w./-]+)['\"]?", all_error_text)
+            if missing: missing_name = missing.group(1).split("/")[-1]
+            
+        if missing_name:
+            for root, dirs, files in os.walk(repo_path):
+                dirs[:] = [d for d in dirs if not d.startswith(".") and d not in
+                           ["node_modules", "__pycache__", "venv", ".venv"]]
+                for f in files:
+                    # Look for matching python or js/ts files
+                    if (not f.endswith(".py") and not f.endswith(".js") and not f.endswith(".ts")) or f.startswith("test") or "test" in f:
+                        continue
+                    stem = os.path.splitext(f)[0]
+                    if stem.startswith(missing_name) or missing_name.startswith(stem):
+                        # The import is wrong in the test file — fix test script
+                        
+                        # Python fallback
+                        test_py = os.path.join(repo_path, "test.py")
+                        if os.path.exists(test_py):
+                            logger.info(f"ModuleNotFoundError: '{missing_name}' fuzzy-matches '{f}' → fixing test.py import")
+                            return test_py
+                            
+                        # Search for the test file locally
+                        for r2, d2, files2 in os.walk(repo_path):
+                            for tf in files2:
+                                if "test" in tf and tf.endswith((".py", ".js", ".ts", ".jsx", ".tsx")):
+                                    return os.path.join(r2, tf)
 
         # ── Strategy 0b: NameError in test file (missing import) ──────────
         # If test.py says "name 'add' is not defined", check if "add" is in the source file.
@@ -556,8 +570,14 @@ class FixGenerator:
                     test_content = f.read()
 
                 import_patterns = [
+                    # Python
                     re.compile(r"from\s+([\w.]+)\s+import"),
                     re.compile(r"^import\s+([\w.]+)", re.MULTILINE),
+                    # JS/TS ES6
+                    re.compile(r"import\s+.*?\s+from\s+['\"](.*?)['\"]"),
+                    re.compile(r"import\s+['\"](.*?)['\"]"),
+                    # JS/TS CommonJS
+                    re.compile(r"require\(['\"](.*?)['\"]\)")
                 ]
 
                 for pattern in import_patterns:
@@ -565,28 +585,33 @@ class FixGenerator:
                         module_name = match.group(1)
                         if module_name in ("os", "sys", "re", "json", "math", "pytest",
                                           "unittest", "mock", "datetime", "collections",
-                                          "typing", "pathlib", "io", "abc"):
+                                          "typing", "pathlib", "io", "abc",
+                                          # JS ignores
+                                          "react", "jest", "vitest", "assert", "chai"):
                             continue
 
-                        module_path = module_name.replace(".", "/") + ".py"
-                        all_py_files = []
+                        module_path = module_name.replace(".", "/")
+                        all_src_files = []
                         for root, dirs, files in os.walk(repo_path):
                             dirs[:] = [d for d in dirs if not d.startswith(".") and d not in
                                        ["node_modules", "__pycache__", "venv", ".venv"]]
                             for f in files:
-                                if not f.endswith(".py"):
+                                if not f.endswith((".py", ".js", ".ts", ".jsx", ".tsx")):
                                     continue
                                 full_path = os.path.join(root, f)
                                 rel_path = os.path.relpath(full_path, repo_path)
-                                all_py_files.append((f, full_path, rel_path))
-                                if rel_path == module_path or f == module_name + ".py":
+                                all_src_files.append((f, full_path, rel_path))
+                                
+                                # Check exact matches (e.g. `import './utils'` -> `/path/to/utils.js`)
+                                base_path_no_ext = os.path.splitext(rel_path)[0]
+                                if base_path_no_ext.endswith(module_path) or f == f"{module_name}.py" or f == f"{module_name}.js" or f == f"{module_name}.ts":
                                     logger.info(f"Found source via import (exact): {full_path}")
                                     return full_path
 
                         # Strategy 1b: Fuzzy match module name to filename
-                        base_module = module_name.split(".")[-1]
-                        for f, full_path, rel_path in all_py_files:
-                            stem = f[:-3]
+                        base_module = module_name.split("/")[-1].split(".")[-1] # handle posix paths and python packages
+                        for f, full_path, rel_path in all_src_files:
+                            stem = os.path.splitext(f)[0]
                             if stem.startswith(base_module) or base_module.startswith(stem):
                                 if not f.startswith("test") and "test" not in f:
                                     logger.info(f"Found source via fuzzy match: {full_path} (module={module_name})")
@@ -624,12 +649,12 @@ class FixGenerator:
             if file_refs:
                 return file_refs[0]
 
-        # Strategy 4: Find any non-test Python file in the repo
+        # Strategy 4: Find any non-test source file in the repo
         for root, dirs, files in os.walk(repo_path):
             dirs[:] = [d for d in dirs if not d.startswith(".") and d not in
                        ["node_modules", "__pycache__", "venv", ".venv"]]
             for f in files:
-                if f.endswith(".py") and not f.startswith("test_") and not f.endswith("_test.py") and f != "conftest.py" and f != "setup.py":
+                if f.endswith((".py", ".js", ".ts", ".jsx", ".tsx")) and not f.startswith("test_") and not f.endswith(("_test.py", ".test.js", ".test.ts", ".spec.js", ".spec.ts")) and f != "conftest.py" and f != "setup.py":
                     return os.path.join(root, f)
 
         # Strategy 5: If all else fails, fix the test file itself

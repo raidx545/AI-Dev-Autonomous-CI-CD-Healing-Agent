@@ -44,10 +44,10 @@ class CloneService:
 
     def clone(self, repo_url: str, github_token: Optional[str] = None) -> str:
         """
-        Clone a GitHub repository to a local directory.
+        Clone a GitHub repository (or local path) to a local directory.
         Returns the local path to the cloned repository.
         """
-        # Extract repo name from URL
+        # Extract repo name from URL or path
         repo_name = repo_url.rstrip("/").split("/")[-1].replace(".git", "")
         clone_dir = os.path.join(settings.clone_base_dir, repo_name)
 
@@ -57,14 +57,15 @@ class CloneService:
 
         # Inject token into URL for private repos
         auth_url = repo_url
-        token = github_token or settings.github_token
-        if token and "github.com" in repo_url:
-            auth_url = repo_url.replace(
-                "https://github.com",
-                f"https://{token}@github.com"
-            )
+        if repo_url.startswith("http"):
+            token = github_token or settings.github_token
+            if token and "github.com" in repo_url:
+                auth_url = repo_url.replace(
+                    "https://github.com",
+                    f"https://{token}@github.com"
+                )
 
-        logger.info(f"Cloning {repo_url} into {clone_dir}")
+        logger.info(f"Cloning {auth_url} into {clone_dir}")
         Repo.clone_from(auth_url, clone_dir)
         logger.info(f"Successfully cloned to {clone_dir}")
 

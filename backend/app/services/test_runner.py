@@ -181,17 +181,19 @@ class TestRunner:
                     scripts = pkg.get("scripts", {})
                     if "test" in scripts:
                         return ["npm", "test", "--", "--passWithNoTests"]
-                except (json.JSONDecodeError, IOError):
-                    pass
+                except (json.JSONDecodeError, IOError) as e:
+                    logger.error(f"Error reading package.json: {e}")
 
-            if "jest" in test_frameworks:
-                return ["npx", "jest", "--passWithNoTests", "--verbose"]
+            # If npm test is not available or failed, try specific frameworks
             if "vitest" in test_frameworks:
-                return ["npx", "vitest", "run", "--reporter=verbose"]
-            if "mocha" in test_frameworks:
-                return ["npx", "mocha", "--recursive"]
-                
-            # Default fallback for JS/TS
+                logger.info("Falling back to vitest.")
+                return ["npx", "vitest", "run", "--passWithNoTests"]
+            
+            if "jest" in test_frameworks:
+                logger.info("Falling back to jest.")
+                return ["npx", "jest", "--passWithNoTests"]
+
+            # Default fallback for JS/TS if no package.json or specific framework found
             logger.info("No explicit JS test framework found. Falling back to vitest.")
             return ["npx", "vitest", "run", "--passWithNoTests"]
 
@@ -398,34 +400,78 @@ class TestRunner:
         return failures
 
     def _parse_jest_failures(self, output: str, repo_path: str) -> list[TestFailure]:
-        """Parse Jest output for failures."""
+        """Parse Jest/Vitest output for failures."""
         failures = []
 
-        # Match Jest FAIL lines
-        fail_pattern = re.compile(r"FAIL\s+([\w/\\.]+)")
-        test_pattern = re.compile(r"✕\s+(.+?)(?:\s*\((\d+)\s*ms\))?$", re.MULTILINE)
-        error_pattern = re.compile(r"●\s+(.+?)\n\n([\s\S]+?)(?=\n\s*●|\n\s*Test Suites:)", re.MULTILINE)
+        # State machine to track the current file being executed
+        current_file = None
+        
+        lines = output.split("\n")
+        
+        for i, line in enumerate(lines):
+            # Track the current file from "FAIL path/to/file.js"
+            fail_match = re.search(r"FAIL\s+([\w/\\._-]+)", line)
+            if fail_match:
+                current_file = fail_match.group(1)
 
-        for match in fail_pattern.finditer(output):
-            file_path = match.group(1)
-            failures.append(TestFailure(
-                test_name="(file-level failure)",
-                file_path=file_path,
-                error_message="Test suite failed",
-                error_type="TestSuiteFailure",
-                raw_output=output,
-            ))
+            # Look for individual test failure blocks: "  ● Test describe › test name"
+            if line.strip().startswith("●"):
+                test_name = line.strip()[2:].strip() # remove '● '
+                
+                # capture the block of text until the next test or error boundary
+                error_block = []
+                for j in range(i + 1, min(i + 50, len(lines))):
+                    if lines[j].strip().startswith("●") or lines[j].strip().startswith("Test Suites:"):
+                        break
+                    error_block.append(lines[j])
+                    
+                error_detail = "\n".join(error_block).strip()
+                
+                # Try to extract exact line number and specific file from the stack trace
+                # e.g. "    at Object.<anonymous> (src/math.js:15:7)"
+                # e.g. "    at src/math.js:15:7"
+                line_no = None
+                actual_file = current_file
+                
+                stack_traces = re.findall(r"at\s+.*?\s*\(?([\w/\\._-]+):(\d+):(\d+)\)?", error_detail)
+                for trace_file, trace_line, _ in stack_traces:
+                    # Skip jest/node internals
+                    if not any(skip in trace_file for skip in ["node_modules", "internal/", "jest-circus"]):
+                        actual_file = trace_file
+                        line_no = int(trace_line)
+                        break
+                
+                # Try to infer ReferenceError, TypeError, SyntaxError from the detail
+                error_type = "AssertionError"
+                if "ReferenceError:" in error_detail:
+                    error_type = "ReferenceError"
+                elif "TypeError:" in error_detail:
+                    error_type = "TypeError"
+                elif "SyntaxError:" in error_detail:
+                    error_type = "SyntaxError"
+                elif "Cannot find module" in error_detail:
+                    error_type = "ModuleNotFoundError"
+                
+                failures.append(TestFailure(
+                    test_name=test_name,
+                    file_path=actual_file if actual_file else "(unknown)",
+                    error_message=error_detail[:500],
+                    error_type=error_type,
+                    line_number=line_no,
+                    raw_output=error_detail,
+                ))
 
-        # Parse individual test failures
-        for match in error_pattern.finditer(output):
-            test_name = match.group(1).strip()
-            error_detail = match.group(2).strip()
-            failures.append(TestFailure(
-                test_name=test_name,
-                error_message=error_detail[:500],
-                error_type="AssertionError",
-                raw_output=output,
-            ))
+        # Vitest specific bare error parsing
+        if not failures and "Error:" in output:
+            for match in re.finditer(r"Error: (.*?)\n\s*at .*? \(([\w/\\._-]+):(\d+):(\d+)\)", output):
+                failures.append(TestFailure(
+                    test_name="(vitest error)",
+                    file_path=match.group(2),
+                    error_message=match.group(1),
+                    error_type=match.group(1).split(":")[0] if ":" in match.group(1) else "Error",
+                    line_number=int(match.group(3)),
+                    raw_output=match.group(0),
+                ))
 
         return failures
 

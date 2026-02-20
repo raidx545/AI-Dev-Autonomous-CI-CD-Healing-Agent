@@ -18,3 +18,17 @@ build/
 *.egg-info/
 
 tmp_agentic_honeypot/
+
+# Mac OS
+._*
+
+# Temporary test repositories
+tmp_dummy_js_project/
+dummy_js_project/
+test_cicd_pipeline_guide.md
+
+# Vite
+.vite/
+backend/app/services/__pycache__/clone_service.cpython-313.pyc
+backend/app/services/__pycache__/fix_generator.cpython-313.pyc
+backend/app/services/__pycache__/test_runner.cpython-313.pyc
