@@ -151,6 +151,10 @@ class CloneService:
         # Check for pytest markers
         if any(f in all_files for f in ["pytest.ini", "conftest.py"]):
             detected.append("pytest")
+            
+        # Fallback: if there are ANY python files, assume pytest as the default test runner
+        if "pytest" not in detected and any(f.endswith(".py") for f in all_files):
+            detected.append("pytest")
 
         return list(set(detected)) if detected else ["unknown"]
 
